@@ -1,0 +1,14 @@
+.md
+.py
+.go
+.js
+.ts
+.jsx
+.tsx
+.css
+.scss
+.html
+.json
+.yaml
+.yml
+.toml

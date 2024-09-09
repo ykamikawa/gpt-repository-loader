@@ -15,4 +15,7 @@ LICENSE
 *.png
 *.jpeg
 *.jpg
+*.pdf
+*.bin
+*.ckpt
 *bin/*
