@@ -76,7 +76,6 @@ def process_repository(repo_root, repo_path, output_file):
     )
     for file_path in managed_files:
         file_path = os.path.join(repo_path, file_path)
-        print(file_path)
         with open(file_path, "r", errors="ignore") as file:
             contents = file.read()
         output_file.write("-" * 4 + "\n")
