@@ -65,9 +65,32 @@ def list_github_managed_files(repo_path, git_ignore_path, gpt_ignore_path):
     return managed_files
 
 
+def remove_extra_whitespace(text):
+    text = re.sub(r"^\s+|\s+$", "", text, flags=re.MULTILINE)
+    text = re.sub(r"\s+", " ", text)
+    return text
+
+
+def remove_comments(text):
+    text = re.sub(r"#.*", "", text)
+    text = re.sub(r"//.*|/\*[\s\S]*?\*/", "", text)
+    return text
+
+
+def remove_tags(text):
+    text = re.sub(r"<[^>]+>", "", text)
+    return text
+
+
+def minimize_text(text):
+    text = remove_extra_whitespace(text)
+    text = remove_comments(text)
+    text = remove_tags(text)
+    return text
+
+
 def process_repository(repo_root, repo_path, output_file):
     git_ignore_path = os.path.join(repo_root, ".gitignore")
-    # try and use the .gptignore file in the current directory as a fallback.
     HERE = os.path.dirname(os.path.abspath(__file__))
     gpt_ignore_path = os.path.join(HERE, ".gptignore")
 
@@ -78,9 +101,10 @@ def process_repository(repo_root, repo_path, output_file):
         file_path = os.path.join(repo_path, file_path)
         with open(file_path, "r", errors="ignore") as file:
             contents = file.read()
+        minimized_contents = minimize_text(contents)
         output_file.write("-" * 4 + "\n")
         output_file.write(f"{file_path}\n")
-        output_file.write(f"{contents}\n")
+        output_file.write(f"{minimized_contents}\n")
 
 
 def get_repo_root(path):
